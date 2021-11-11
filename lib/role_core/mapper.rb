@@ -18,11 +18,18 @@ module RoleCore
       raise ArgumentError, "must provide a block" unless block_given?
 
       constraints[:_namespace] ||= @constraints[:_namespace].dup
-      constraints[:_namespace] << name
+      if constraints[:_scope] != false
+        constraints[:_namespace] << name
+      end
 
       sub_permission_set_class =
         if @set.nested_classes.key?(name)
           @set.nested_classes[name]
+        elsif constraints[:model_name].present?
+          klass = PermissionSet.derive constraints[:model_name]
+          @set.embeds_one(name, anonymous_class: klass)
+
+          klass
         else
           klass_name = constraints[:_namespace].map { |n| n.to_s.classify }.join("::")
           klass = PermissionSet.derive klass_name
