@@ -25,7 +25,7 @@ module RoleCore
       sub_permission_set_class =
         if @set.nested_classes.key?(name)
           @set.nested_classes[name]
-        elsif constraints[:model_name].present?
+        elsif constraints.key?(:model_name)
           klass = PermissionSet.derive constraints[:model_name]
           @set.embeds_one(name, anonymous_class: klass)
 
