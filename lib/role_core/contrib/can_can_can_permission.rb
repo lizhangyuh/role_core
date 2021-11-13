@@ -8,10 +8,14 @@ module RoleCore
       super
       return unless _callable
 
-      @model_name = options[:model_name]
-      @subject = options[:subject]
-      @action = options[:action] || name
-      @options = options.except(:model, :model_name, :subject, :action)
+      @model_name = options.delete(:model_name)
+      @subject = options.delete(:subject)
+      @action = options.delete(:action) || name
+      # @options = options.except(:model, :_scope, :_namespace, :_priority)
+      @options = options.select do |key, value|
+        key =~ /^(?!_)/
+      end
+
       @block = block
     end
 
