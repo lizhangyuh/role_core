@@ -18,7 +18,7 @@ module RoleCore
       raise ArgumentError, "must provide a block" unless block_given?
 
       constraints[:_namespace] ||= @constraints[:_namespace].dup
-      if constraints[:_scope] != false
+      if constraints[:_scope] != true
         constraints[:_namespace] << name
       end
 
