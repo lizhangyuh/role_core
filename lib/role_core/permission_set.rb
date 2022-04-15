@@ -13,6 +13,19 @@ module RoleCore
       ComputedPermissions.new(permissions)
     end
 
+    def can?(*params)
+      _permissions = self
+      params.each do |p|
+        if _permissions.methods.include? p
+          _permissions = _permissions.send(p)
+        else
+          return false
+        end
+      end
+
+      _permissions
+    end
+
     class << self
       def i18n_scope
         :role_core
